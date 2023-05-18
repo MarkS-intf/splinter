@@ -1,5 +1,5 @@
-### Splinter
-## A TestRail to Jira Migration Tool
+# Splinter
+### A TestRail to Jira Migration Tool
 
 This project allows you to easily migrate test cases from TestRail to Jira as new issues. This tool is written in Node.js and uses the TestRail and Jira REST APIs to fetch and create data respectively.
 
@@ -8,20 +8,37 @@ This project allows you to easily migrate test cases from TestRail to Jira as ne
     Node.js
     NPM (Node Package Manager)
 
+## Dependencies Used
+- axios: This is a popular, promise-based HTTP client for making asynchronous HTTP requests to REST endpoints. It supports several features like interceptors, transforms, and automatic transforms for JSON data. It's being used in your project to make HTTP requests to TestRail and Jira APIs.
+
+- dotenv: This is a module that loads environment variables from a .env file into process.env. It provides an easy way to allow your project to have configuration-specific variables. In your project, it's likely being used to manage sensitive data such as API keys and URLs.
+
+- @babel/eslint-parser: This is a parser that allows ESLint to lint all valid Babel code. ESLint is a tool for identifying and reporting on patterns in JavaScript, and Babel is a toolchain that is mainly used to convert ECMAScript 2015+ code into a backward-compatible version of JavaScript. The parser is used here to ensure that ESLint can correctly interpret and lint your code.
+
+- eslint: This is a highly configurable and flexible tool that is used to identify and report on patterns in JavaScript. It helps to maintain code quality and ensure coding conventions are followed.
+
+- eslint-plugin-filenames: This is an ESLint plugin that enforces naming conventions for your files based on the configurations specified. It helps to maintain consistent filenames throughout the project.
+
+- eslint-plugin-node: This is an ESLint plugin that provides a set of linting rules specific to Node.js. It helps to prevent common errors in Node.js code and ensure good practices are followed.
+
 ## Environment Variables
 
 Create a .env file in the root directory and populate the following variables:
 
-```TESTRAIL_USERNAME=<Your TestRail Username>```
-```TESTRAIL_PASSWORD=<Your TestRail Password or API Key>```
-```JIRA_USERNAME=<Your Jira Email>```
-```JIRA_API_KEY=<Your Jira API Key>```
+```
+TESTRAIL_USERNAME='<your_testrail_username>'
+TESTRAIL_PASSWORD='<your_testrail_password>'
+TESTRAIL_API_KEY='<your_testrail_api_key>'
+JIRA_USERNAME='<your_jira_username>'
+JIRA_PASSWORD='<your_jira_password>'
+JIRA_API_KEY='<your_jira_api_key>'
+```
 
 ## Installation
 
 Clone the repository: git clone https://github.com/YourUsername/TestRailToJira.git
 Navigate to the project directory: ```cd TestRailToJira```
-Install the dependencies: npm install
+Install the dependencies: ```npm install```
 
 ## Usage
 
