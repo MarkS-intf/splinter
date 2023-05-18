@@ -1,0 +1,195 @@
+{
+  "env": {
+    "commonjs": true,
+    "node": true,
+    "es2020": true
+  },
+  "parser": "@babel/eslint-parser",
+  "globals": {
+    "browser": "readonly",
+    "it": "readonly",
+    "describe": "readonly",
+    "before": "readonly",
+    "beforeEach": "readonly",
+    "after": "readonly",
+    "afterEach": "readonly"
+  },
+  "plugins": [
+    "filenames",
+    "node"
+  ],
+  "extends": [
+    "plugin:node/recommended",
+    "eslint:recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "requireConfigFile": false
+  },
+  "rules": {
+    "node/exports-style": [
+      "error",
+      "module.exports"
+    ],
+    "node/file-extension-in-import": [
+      "error",
+      "never"
+    ],
+    "filenames/match-regex": [
+      2,
+      "^([a-z][a-z0-9]*)(-[a-z0-9]+)*(?:.spec)?$",
+      true
+    ],
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1,
+        "MemberExpression": 1,
+        "ArrayExpression": "first",
+        "ObjectExpression": "first",
+        "FunctionDeclaration": {
+          "parameters": "first"
+        },
+        "CallExpression": {
+          "arguments": "first"
+        },
+        "ignoredNodes": [
+          "ConditionalExpression"
+        ]
+      }
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "never"
+    ],
+    "curly": [
+      "error"
+    ],
+    "no-debugger": [
+      "error"
+    ],
+    "no-console": [
+      "error",
+      {
+        "allow": [
+          "debug",
+          "warn",
+          "error",
+          "info"
+        ]
+      }
+    ],
+    "comma-style": [
+      "error",
+      "last"
+    ],
+    "comma-spacing": [
+      "error",
+      { 
+        "before": false,
+        "after": true 
+      }
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "newline-per-chained-call": [
+      "error",
+      {
+        "ignoreChainWithDepth": 2
+      }
+    ],
+    "operator-linebreak": [
+      "error",
+      "before",
+      {
+        "overrides": {
+          "?": "none"
+        }
+      }
+    ],
+    "object-curly-newline": [
+      "error",
+      {
+        "ObjectExpression": { "multiline": true, "minProperties": 3, "consistent": true }
+      }
+    ],
+    "object-property-newline": [
+      "error",
+      {
+        "allowAllPropertiesOnSameLine": true
+      }
+    ],
+    "keyword-spacing": [
+      "error",
+      {
+        "before": true,
+        "after": true,
+        "overrides": {
+          "if": {
+            "after": false
+          },
+          "while": {
+            "after": false
+          },
+          "for": {
+            "after": false
+          },
+          "catch": {
+            "after": false
+          },
+          "switch": {
+            "after": false
+          },
+          "case": {
+            "after": true
+          }
+        }
+      }
+    ],
+    "space-in-parens": [
+      "error",
+      "never"
+    ],
+    "space-before-blocks": [
+      "error"
+    ],
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "block-spacing": [
+      "error",
+      "always"
+    ],
+    "template-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "key-spacing": [
+      "error",
+      {
+        "beforeColon": false,
+        "afterColon": true
+      }
+    ],
+    "arrow-spacing": [
+      "error",
+      {
+        "before": true,
+        "after": true
+      }
+    ],
+    "node/no-extraneous-require": ["error", {
+      "allowModules": ["request"]
+    }],
+    "no-trailing-spaces": "error",
+    "space-infix-ops": "error"
+  }
+}
