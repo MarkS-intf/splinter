@@ -44,6 +44,21 @@ function formatTestRailResponse(response) {
 
 // Formatting jira request body
 function formatJiraRequest(title, epicId, testRailData){
+    const description = `
+    ${testRailData
+      .replace(/\\n/g, '') // Remove '\n' characters
+      .replace(/\\r/g, '') // Remove '\r' characters
+      .replace(/'{2,}/g, '\'') // Remove consecutive single quotes
+      .replace(/\s+\'/g, '\'') // Remove leading spaces before single quotes
+      .replace(/\'\s+/g, '\'') // Remove trailing spaces after single quotes
+      .replace(/(\{|\})/g, '') // Remove curly braces
+      .replace(/"/g, '')
+      .split('\n') // Split the string into an array of lines
+      .map(line => line.trim()) // Trim leading and trailing whitespace from each line
+    }`
+    const trimmedTemplate = description.trim();
+    const formattedTemplate = trimmedTemplate.replace(/\s+/g, ' ');
+
     return {
       "fields": {
         "project": {
@@ -86,7 +101,7 @@ function formatJiraRequest(title, epicId, testRailData){
               "content": [
                 {
                   "type": "text",
-                  "text": `"${testRailData}"`
+                  "text": formattedTemplate
                 }
               ]
             }
@@ -121,10 +136,8 @@ async function getTestCasesPerSuite(suiteId) {
 
 // Creating a Jira ticket
 async function createJiraTicket(formattedRequest) {
-    /*/
     try {
-      const response = await jiraApi.post('/rest/api/2/issue', formattedRequest)
-      console.log(response)
+      const response = await jiraApi.post('/rest/api/3/issue', formattedRequest)
       if (response.status === 201) {
         console.log(`Jira ticket successfully created with ID: ${response.data.id}`)
       } else {
@@ -133,9 +146,6 @@ async function createJiraTicket(formattedRequest) {
     } catch (error) {
       console.error('Error creating Jira ticket:', error)
     }
-    */
-    const response = await jiraApi.post('/rest/api/3/issue', formattedRequest)
-    console.log(response)
   }  
 
 module.exports = { 

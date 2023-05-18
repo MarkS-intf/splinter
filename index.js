@@ -29,27 +29,16 @@ async function main() {
     formattedTestsForJira.push(responseDict)
   }
 
-  // Extract the first test's title and data from the array
-  const firstTest = formattedTestsForJira[0];
-  const firstTitle = Object.keys(firstTest)[0];
-  const firstTestRailData = firstTest[firstTitle];
-
-  // Format the Jira request body and create the Jira ticket
-  const jiraRequestBody = formatJiraRequest(firstTitle, jiraEpicId, JSON.stringify(formattedTestsForJira[0]))
-  await createJiraTicket(jiraRequestBody);
-
-  /*
   // For every test object in formattedTestsForJira
   for (let test of formattedTestsForJira) {
-    // Extract the title and data from the test
-    const title = Object.keys(test)[0];
-    const testRailData = test[title];
+    // Extract the title and data from the tests
+    const title = Object.keys(test)[0]
+    const testRailData = Object.values(test)[0]
 
     // Format the Jira request body and create the Jira ticket
-    const jiraRequestBody = formatJiraRequest(title, jiraEpicId, testRailData);
-    await createJiraTicket(jiraRequestBody);
+    const jiraRequestBody = formatJiraRequest(title, jiraEpicId, JSON.stringify(testRailData))
+    await createJiraTicket(jiraRequestBody)
   }
-  */
 }
 
 main()
