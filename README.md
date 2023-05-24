@@ -44,11 +44,15 @@ Install the dependencies: ```npm install```
 
 Run the script by passing in the TestRail Section ID and the Jira Epic ID:
 
-```node index.js <sectionId> <jiraEpicId>```
+```node splinter.js <testrail-sectionId> <jiraEpicId>```
 
-Replace <sectionId> and <jiraEpicId> with your actual TestRail Section ID and Jira Epic ID.
+Replace <testrail-sectionId> and <jiraEpicId> with your actual TestRail Section ID and Jira Epic ID.
 
-This will fetch all the test cases under the given TestRail section and create new issues under the given Jira epic.
+This will fetch all the test cases under the given TestRail section (folder) and create new issues under the given Jira epic.
+
+Additionally, you can provide a single testrail case ID (without the C-prefix):
+
+```node splinter.js <testCaseID> <jiraEpicId>```
 
 ## ToDo
 - Fix formatting when exporting to Jira

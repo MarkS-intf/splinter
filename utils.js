@@ -48,7 +48,9 @@ function formatJiraRequest(title, epicId, testRailData) {
     .replace(/\\n/g, '') // Remove '\n' characters
     .replace(/\\r/g, '') // Remove '\r' characters
     .replace(/'{2,}/g, '\'') // Remove consecutive single quotes
+    // eslint-disable-next-line no-useless-escape
     .replace(/\s+\'/g, '\'') // Remove leading spaces before single quotes
+    // eslint-disable-next-line no-useless-escape
     .replace(/\'\s+/g, '\'') // Remove trailing spaces after single quotes
     .replace(/(\{|\})/g, '') // Remove curly braces
     .replace(/"/g, '')
@@ -149,9 +151,20 @@ async function createJiraTicket(formattedRequest) {
   }
 }
 
+// Getting a single test case from TestRail
+async function getSingleTestCase(testCaseId) {
+  try {
+    const response = await testRailApi.get(`/index.php?/api/v2/get_case/${ testCaseId }`)
+    return response.data
+  } catch(error) {
+    console.error(`Error fetching test case with ID ${ testCaseId }:`, error)
+  }
+}
+
 module.exports = {
   formatTestRailResponse,
   formatJiraRequest,
   getTestCasesPerSuite,
-  createJiraTicket
+  createJiraTicket,
+  getSingleTestCase
 }
