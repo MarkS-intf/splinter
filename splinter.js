@@ -5,6 +5,7 @@ const {
   getTestCasesPerSuite,
   createJiraTicket,
   getSingleTestCase,
+  updateTestRailReference
 } = require('./utils')
 
 let formattedTestsForJira = []
@@ -31,11 +32,22 @@ async function main() {
     const testCaseId = secondArg
     const jiraEpicId = thirdArg
 
+    // Get the specified test case from Testrail
     const singleCaseResponse = await getSingleTestCase(testCaseId)
+
+    // format the testrail response
     const formattedTest = formatTestRailResponse(singleCaseResponse)
+
+    // Formatting the request for Jira
     const jiraRequestBody = formatJiraRequest(singleCaseResponse.title, jiraEpicId, JSON.stringify(formattedTest))
-    await createJiraTicket(jiraRequestBody)
+
+    // Sending the request
+    const newJiraTicketId = await createJiraTicket(jiraRequestBody)
+
+    // Updating the reference in Testrail and linking the created Jira ticket
+    await updateTestRailReference(testCaseId, newJiraTicketId)
   } else {
+    // Same operations as the above, but in bulk
     const sectionId = firstArg
     const jiraEpicId = secondArg
     const apiResponse = await getTestCasesPerSuite(sectionId)
@@ -49,10 +61,22 @@ async function main() {
     }
 
     for(let test of formattedTestsForJira) {
+      // Getting the title and test data
       const title = Object.keys(test)[0]
       const testRailData = Object.values(test)[0]
+
+      // Extracting the Testrail ID
+      const testRailCaseIdMatch = testRailData.match(/Testrail: C(\d+)/)
+      const testRailCaseId = testRailCaseIdMatch ? testRailCaseIdMatch[1] : null
+
+      // Formatting the requestfor Jira
       const jiraRequestBody = formatJiraRequest(title, jiraEpicId, JSON.stringify(testRailData))
-      await createJiraTicket(jiraRequestBody)
+
+      // Sending the request
+      const newJiraTicketId = await createJiraTicket(jiraRequestBody)
+
+      // Updating the reference in Testrail and linking the created Jira ticket
+      await updateTestRailReference(testRailCaseId, newJiraTicketId)
     }
   }
 }

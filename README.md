@@ -1,7 +1,7 @@
 # Splinter
 ### A TestRail to Jira Migration Tool
 
-This project allows you to easily migrate test cases from TestRail to Jira as new issues. This tool is written in Node.js and uses the TestRail and Jira REST APIs to fetch and create data respectively.
+This project allows you to easily migrate test cases from TestRail to Jira as new issues (what we know as tickets). It will copy and paste singular or bulk testrail tests. By default it takes a testrail folder ID. It also updates testrail references to help ensure a 1:1 relationship between Jira and Testrail. This tool is written in Node.js and uses the TestRail and Jira REST APIs to fetch, create, and update data respectively.
 
 ## Prerequisites
 
@@ -52,7 +52,7 @@ This will fetch all the test cases under the given TestRail section (folder) and
 
 Additionally, you can provide a single testrail case ID (without the C-prefix):
 
-```node splinter.js <testCaseID> <jiraEpicId>```
+```node splinter.js -s <testCaseID> <jiraEpicId>```
 
 ## ToDo
 - Fix formatting when exporting to Jira

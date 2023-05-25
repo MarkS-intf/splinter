@@ -141,7 +141,8 @@ async function createJiraTicket(formattedRequest) {
     const response = await jiraApi.post('/rest/api/3/issue', formattedRequest)
     if(response.status === 201) {
       // eslint-disable-next-line no-console
-      console.log(`Jira ticket successfully created with ID: ${ response.data.id }`)
+      console.log(`Jira ticket successfully created with ID: ${ response.data.key }`)
+      return response.data.key
     } else {
       // eslint-disable-next-line no-console
       console.log('Unexpected response status:', response.status)
@@ -161,10 +162,23 @@ async function getSingleTestCase(testCaseId) {
   }
 }
 
+async function updateTestRailReference(testCaseId, newJiraTicketId) {
+  const formattedRequest = {
+    refs: newJiraTicketId
+  }
+  try {
+    const response = await testRailApi.post(`index.php?/api/v2/update_case/${ testCaseId }`, formattedRequest)
+    return response.data
+  } catch(error) {
+    console.error('Error fetching test cases:', error)
+  }
+}
+
 module.exports = {
   formatTestRailResponse,
   formatJiraRequest,
   getTestCasesPerSuite,
   createJiraTicket,
-  getSingleTestCase
+  getSingleTestCase,
+  updateTestRailReference
 }
