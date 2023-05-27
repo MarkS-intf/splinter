@@ -20,46 +20,8 @@ const jiraApi = axios.create({
   },
 })
 
-// Formatting the testrail cases to look nice in Jira
-function formatTestRailResponse(response) {
-  return `
-    Testrail: C${ response.id }
-  
-    ${ response.custom_description }
-  
-    Preconditions:
-    ${ response.custom_preconds }
-  
-    Steps:
-    ${ response.custom_steps }
-  
-    Expected Result:
-    ${ response.custom_expected }
-  
-    Comments:
-    ${ response.custom_review_comments }
-      `
-}
-
 // Formatting jira request body
 function formatJiraRequest(title, epicId, testRailData) {
-  const description = `
-    ${ testRailData
-    .replace(/\\n/g, '') // Remove '\n' characters
-    .replace(/\\r/g, '') // Remove '\r' characters
-    .replace(/'{2,}/g, '\'') // Remove consecutive single quotes
-    // eslint-disable-next-line no-useless-escape
-    .replace(/\s+\'/g, '\'') // Remove leading spaces before single quotes
-    // eslint-disable-next-line no-useless-escape
-    .replace(/\'\s+/g, '\'') // Remove trailing spaces after single quotes
-    .replace(/(\{|\})/g, '') // Remove curly braces
-    .replace(/"/g, '')
-    .split('\n') // Split the string into an array of lines
-    .map(line => line.trim()) // Trim leading and trailing whitespace from each line
-}`
-  const trimmedTemplate = description.trim()
-  const formattedTemplate = trimmedTemplate.replace(/\s+/g, ' ')
-
   return {
     'fields': {
       'project': {
@@ -97,12 +59,63 @@ function formatJiraRequest(title, epicId, testRailData) {
         'version': 1,
         'type': 'doc',
         'content': [
+          // Testrail ID
           {
             'type': 'paragraph',
             'content': [
               {
                 'type': 'text',
-                'text': formattedTemplate
+                'text': `Testrail: C${ testRailData.id }`
+              }
+            ]
+          },
+          // Story
+          {
+            'type': 'paragraph',
+            'content': [
+              {
+                'type': 'text',
+                'text': `Description:\n${ testRailData.custom_description }`
+              }
+            ]
+          },
+          // Preconditions
+          {
+            'type': 'paragraph',
+            'content': [
+              {
+                'type': 'text',
+                'text': `Preconditions:\n${ testRailData.custom_preconds }`
+              }
+            ]
+          },
+          // Steps
+          {
+            'type': 'paragraph',
+            'content': [
+              {
+                'type': 'text',
+                'text': `Steps:\n${ testRailData.custom_steps }`
+              }
+            ]
+          },
+          // Expected results
+          {
+            'type': 'paragraph',
+            'content': [
+              {
+                'type': 'text',
+                'text': `Expected Results:\n${ testRailData.custom_expected }`
+              }
+            ]
+          },
+          // Comments
+          {
+            'type': 'paragraph',
+            'content': [
+              {
+                'type': 'text',
+                'text': `Comments:\n${ testRailData.custom_review_comments }`
               }
             ]
           }
@@ -175,7 +188,6 @@ async function updateTestRailReference(testCaseId, newJiraTicketId) {
 }
 
 module.exports = {
-  formatTestRailResponse,
   formatJiraRequest,
   getTestCasesPerSuite,
   createJiraTicket,
