@@ -1,7 +1,7 @@
 # Splinter
 ### A TestRail to Jira Migration Tool
 
-This project allows you to easily migrate test cases from TestRail to Jira as new issues. This tool is written in Node.js and uses the TestRail and Jira REST APIs to fetch and create data respectively.
+This project allows you to easily migrate test cases from TestRail to Jira as new issues (what we know as tickets). It will copy and paste singular or bulk testrail tests. By default it takes a testrail folder ID. It also updates testrail references to help ensure a 1:1 relationship between Jira and Testrail. This tool is written in Node.js and uses the TestRail and Jira REST APIs to fetch, create, and update data respectively.
 
 ## Prerequisites
 
@@ -44,19 +44,30 @@ Install the dependencies: ```npm install```
 
 Run the script by passing in the TestRail Section ID and the Jira Epic ID:
 
-```node index.js <sectionId> <jiraEpicId>```
+```node splinter.js -f <testrail-sectionId> <jiraEpicId>```
 
-Replace <sectionId> and <jiraEpicId> with your actual TestRail Section ID and Jira Epic ID.
+Replace <testrail-sectionId> and <jiraEpicId> with your actual TestRail Section ID and Jira Epic ID.
 
-This will fetch all the test cases under the given TestRail section and create new issues under the given Jira epic.
+This will fetch all the test cases under the given TestRail section (folder) and create new issues under the given Jira epic.
+
+Additionally, you can provide a single testrail case ID (without the C-prefix):
+
+```node splinter.js -s <testCaseID> <jiraEpicId>```
+
+Or if you have a bunch of singular tickets that don't live under the same folder in Jira, you can fill out the "testrail-caseids.txt" file and then use the -b (bulk) command
+
+```node splinter.js -b <jiraEpicId>```
+
+## Usage Cont.
+The -s flag is used for creating a single jira ticket. It requires both a test case ID and a JIRA epic ID as arguments. The code retrieves a test case from TestRail using the provided ID, creates a new JIRA ticket with the retrieved test case data, and updates the TestRail reference with the newly created JIRA ticket ID.
+
+The -f flag is used for creating multiple Jira tickets based on a TestRail folder (or the group ID). It requires both a TestRail folder ID and a JIRA epic ID as arguments. The code retrieves all test cases from the TestRail folder using the provided folder ID, creates new JIRA tickets for each test case, and updates the TestRail references with the corresponding new JIRA ticket IDs.
+
+The -b flag is used for creating JIRA tickets in bulk from a text file containing TestRail case IDs. It requires a JIRA epic ID as an argument. The code reads test case IDs from a predefined text file (testrail-caseids.txt), retrieves each test case from TestRail using the provided IDs, creates new JIRA tickets for each test case, and updates the TestRail references with the corresponding new JIRA ticket IDs. If the text file doesn't exist, the code creates it and exits the program, prompting the user to fill it out and run the command again.
 
 ## ToDo
-- Fix formatting when exporting to Jira
 - Link test to epic ticket via CLI args
-- Update console output to display ALL ticket IDs created after execution of script
-- Ticket IDs are being returned numerically (ex. 95353) instead of starting with the prefix "QAB"
 - Right now MY credentials are being used in the .env file so I'm going to be watching every ticket created by default.
-- Update the script to accept an array or textfile full of IDs instead of just a Testrail folder/"section"
 - There should probably be some error handling in terms of checking an epic ticket beforehand to make sure that the test you're about to create, isn't already in there. We definitely don't want a ton of duplicates 
 
 ## Contributing
