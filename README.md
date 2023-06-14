@@ -40,30 +40,18 @@ Clone the repository: git clone https://github.com/YourUsername/TestRailToJira.g
 Navigate to the project directory: ```cd TestRailToJira```
 Install the dependencies: ```npm install```
 
-## Usage
-
-Run the script by passing in the TestRail Section ID and the Jira Epic ID:
-
-```node splinter.js -f <testrail-sectionId> <jiraEpicId>```
-
-Replace <testrail-sectionId> and <jiraEpicId> with your actual TestRail Section ID and Jira Epic ID.
-
-This will fetch all the test cases under the given TestRail section (folder) and create new issues under the given Jira epic.
-
-Additionally, you can provide a single testrail case ID (without the C-prefix):
-
-```node splinter.js -s <testCaseID> <jiraEpicId>```
-
-Or if you have a bunch of singular tickets that don't live under the same folder in Jira, you can fill out the "testrail-caseids.txt" file and then use the -b (bulk) command
-
-```node splinter.js -b <jiraEpicId>```
-
-## Usage Cont.
+## Usage 
 The -s flag is used for creating a single jira ticket. It requires both a test case ID and a JIRA epic ID as arguments. The code retrieves a test case from TestRail using the provided ID, creates a new JIRA ticket with the retrieved test case data, and updates the TestRail reference with the newly created JIRA ticket ID.
+
+```node splinter.js -s <testCaseId> <jiraEpicId>```
 
 The -f flag is used for creating multiple Jira tickets based on a TestRail folder (or the group ID). It requires both a TestRail folder ID and a JIRA epic ID as arguments. The code retrieves all test cases from the TestRail folder using the provided folder ID, creates new JIRA tickets for each test case, and updates the TestRail references with the corresponding new JIRA ticket IDs.
 
+```node splinter.js -s <groupId> <jiraEpicId>```
+
 The -b flag is used for creating JIRA tickets in bulk from a text file containing TestRail case IDs. It requires a JIRA epic ID as an argument. The code reads test case IDs from a predefined text file (testrail-caseids.txt), retrieves each test case from TestRail using the provided IDs, creates new JIRA tickets for each test case, and updates the TestRail references with the corresponding new JIRA ticket IDs. If the text file doesn't exist, the code creates it and exits the program, prompting the user to fill it out and run the command again.
+
+```node splinter.js -b <jiraEpicId>```
 
 ## ToDo
 - Link test to epic ticket via CLI args
