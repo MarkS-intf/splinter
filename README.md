@@ -58,21 +58,16 @@ Or if you have a bunch of singular tickets that don't live under the same folder
 
 ```node splinter.js -b <jiraEpicId>```
 
-
 ## Usage Cont.
-The -s flag is used for creating a single test case. It requires both a test case ID and a JIRA epic ID as arguments. The code retrieves a test case from TestRail using the provided ID, creates a new JIRA ticket with the retrieved test case data, and updates the TestRail reference with the newly created JIRA ticket ID.
+The -s flag is used for creating a single jira ticket. It requires both a test case ID and a JIRA epic ID as arguments. The code retrieves a test case from TestRail using the provided ID, creates a new JIRA ticket with the retrieved test case data, and updates the TestRail reference with the newly created JIRA ticket ID.
 
-The -f flag is used for creating JIRA tickets in bulk, based on a TestRail folder (or suite). It requires both a TestRail suite ID and a JIRA epic ID as arguments. The code retrieves all test cases from the TestRail suite using the provided suite ID, creates new JIRA tickets for each test case, and updates the TestRail references with the corresponding new JIRA ticket IDs.
+The -f flag is used for creating multiple Jira tickets based on a TestRail folder (or the group ID). It requires both a TestRail folder ID and a JIRA epic ID as arguments. The code retrieves all test cases from the TestRail folder using the provided folder ID, creates new JIRA tickets for each test case, and updates the TestRail references with the corresponding new JIRA ticket IDs.
 
 The -b flag is used for creating JIRA tickets in bulk from a text file containing TestRail case IDs. It requires a JIRA epic ID as an argument. The code reads test case IDs from a predefined text file (testrail-caseids.txt), retrieves each test case from TestRail using the provided IDs, creates new JIRA tickets for each test case, and updates the TestRail references with the corresponding new JIRA ticket IDs. If the text file doesn't exist, the code creates it and exits the program, prompting the user to fill it out and run the command again.
 
 ## ToDo
-- Fix formatting when exporting to Jira
 - Link test to epic ticket via CLI args
-- Update console output to display ALL ticket IDs created after execution of script
-- Ticket IDs are being returned numerically (ex. 95353) instead of starting with the prefix "QAB"
 - Right now MY credentials are being used in the .env file so I'm going to be watching every ticket created by default.
-- Update the script to accept an array or textfile full of IDs instead of just a Testrail folder/"section"
 - There should probably be some error handling in terms of checking an epic ticket beforehand to make sure that the test you're about to create, isn't already in there. We definitely don't want a ton of duplicates 
 
 ## Contributing
