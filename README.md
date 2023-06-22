@@ -11,7 +11,7 @@ This project allows you to easily migrate test cases from TestRail to Jira as ne
 ## Dependencies Used
 - axios: This is a popular, promise-based HTTP client for making asynchronous HTTP requests to REST endpoints. It supports several features like interceptors, transforms, and automatic transforms for JSON data. It's being used in your project to make HTTP requests to TestRail and Jira APIs.
 
-- dotenv: This is a module that loads environment variables from a .env file into process.env. It provides an easy way to allow your project to have configuration-specific variables. In your project, it's likely being used to manage sensitive data such as API keys and URLs.
+- dotenv: This is a module that loads environment variables from a .env file into process.env. It provides an easy way to allow your project to have configuration-specific variables. It's being used to manage sensitive data such as API keys and URLs.
 
 - @babel/eslint-parser: This is a parser that allows ESLint to lint all valid Babel code. ESLint is a tool for identifying and reporting on patterns in JavaScript, and Babel is a toolchain that is mainly used to convert ECMAScript 2015+ code into a backward-compatible version of JavaScript. The parser is used here to ensure that ESLint can correctly interpret and lint your code.
 
