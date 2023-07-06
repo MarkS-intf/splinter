@@ -1,13 +1,16 @@
 require('dotenv').config()
 const axios = require('axios')
+const btoa = require('btoa')
+
+const credentials = btoa(`${ process.env.TESTRAIL_USERNAME }:${ process.env.TESTRAIL_PASSWORD }`)
 
 // Initializing credentials for API calls
 const testRailApi = axios.create({
   baseURL: 'https://interfolio.testrail.com',
-  auth: {
-    username: process.env.TESTRAIL_USERNAME,
-    password: process.env.TESTRAIL_PASSWORD,
-  },
+  headers: {
+    'Authorization': `Basic ${ credentials }`,
+    'Content-Type': 'application/json'
+  }
 })
 
 const jiraApi = axios.create({
@@ -175,6 +178,18 @@ async function getSingleTestCase(testCaseId) {
   }
 }
 
+async function updateTestRailAutomationStatus(testCaseId) {
+  const formattedRequest = {
+    custom_execution_type: 2
+  }
+  try {
+    const response = await testRailApi.post(`index.php?/api/v2/update_case/${ testCaseId }`, formattedRequest)
+    return response.data
+  } catch(error) {
+    console.error('Error fetching test cases:', error)
+  }
+}
+
 async function updateTestRailReference(testCaseId, newJiraTicketId) {
   const formattedRequest = {
     refs: newJiraTicketId
@@ -192,5 +207,6 @@ module.exports = {
   getTestCasesPerSuite,
   createJiraTicket,
   getSingleTestCase,
-  updateTestRailReference
+  updateTestRailReference,
+  updateTestRailAutomationStatus
 }
