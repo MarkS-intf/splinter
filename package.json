@@ -10,7 +10,9 @@
     "license": "ISC",
     "dependencies": {
         "axios": "^0.21.1",
-        "dotenv": "^10.0.0"
+        "btoa": "^1.2.1",
+        "dotenv": "^10.0.0",
+        "glob": "^10.3.1"
     },
     "devDependencies": {
         "@babel/eslint-parser": "^7.21.8",
