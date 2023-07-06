@@ -5,7 +5,7 @@ This project allows you to easily migrate test cases from TestRail to Jira as ne
 
 ## Prerequisites
 
-    Node.js
+    Node.js (v. 14.20.0 specifically)
     NPM (Node Package Manager)
 
 ## Dependencies Used

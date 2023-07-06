@@ -3,6 +3,7 @@ const axios = require('axios')
 const btoa = require('btoa')
 
 const credentials = btoa(`${ process.env.TESTRAIL_USERNAME }:${ process.env.TESTRAIL_PASSWORD }`)
+let requestCount = 0
 
 // Initializing credentials for API calls
 const testRailApi = axios.create({
@@ -183,8 +184,8 @@ async function updateTestRailAutomationStatus(testCaseId) {
     custom_execution_type: 2
   }
   try {
-    const response = await testRailApi.post(`index.php?/api/v2/update_case/${ testCaseId }`, formattedRequest)
-    return response.data
+    await testRailApi.post(`index.php?/api/v2/update_case/${ testCaseId }`, formattedRequest)
+    console.log(`Test case ID:${ testCaseId }'s status has been updated to 'Automated'`)
   } catch(error) {
     console.error('Error fetching test cases:', error)
   }
@@ -202,8 +203,23 @@ async function updateTestRailReference(testCaseId, newJiraTicketId) {
   }
 }
 
+function formatPath(path) {
+  return path.replace(/\\/g, '/')
+}
+
+async function rateLimitedUpdate(id) {
+  if(requestCount >= 150) {
+    await new Promise(resolve => setTimeout(resolve, 90000)) // Wait for 1.5 minutes
+    requestCount = 0 // Reset the count after the wait
+  }
+  await updateTestRailAutomationStatus(id)
+  requestCount++
+}
+
 module.exports = {
+  formatPath,
   formatJiraRequest,
+  rateLimitedUpdate,
   getTestCasesPerSuite,
   createJiraTicket,
   getSingleTestCase,

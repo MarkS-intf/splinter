@@ -4,10 +4,13 @@ const {
   getTestCasesPerSuite,
   createJiraTicket,
   getSingleTestCase,
-  updateTestRailReference
+  updateTestRailReference,
+  formatPath,
+  rateLimitedUpdate
 } = require('./utils')
 const fs = require('fs')
 const path = require('path')
+const { glob } = require('glob')
 
 let formattedTestsForJira = []
 
@@ -100,6 +103,67 @@ async function main() {
       const newJiraTicketId = await createJiraTicket(jiraRequestBody)
       await updateTestRailReference(testCaseId, newJiraTicketId)
     }
+  }
+  // COMMAND: Bulk Update Testrail tests to 'Automated' if they exist in either automation framework
+  else if(firstArg === '-u') {
+    if(!secondArg) {
+      console.error('Please specify which framework you would like to update: xena or e2e')
+      // eslint-disable-next-line no-process-exit
+      process.exit(1)
+    }
+
+    if(!thirdArg) {
+      console.error('Missing directory path for update operation. Usage: node index.js -u <directory-path>')
+      // eslint-disable-next-line no-process-exit
+      process.exit(1)
+    }
+
+    // formats the path correctly for glob
+    const directoryPath = formatPath(thirdArg)
+    let count = 0
+
+    // If xena
+    if(secondArg === '-xena') {
+      // Find all .spec.js files in the specified directory
+      const files = glob.sync(`${ directoryPath }/**/*.spec.js`)
+
+      for(const file of files) {
+      // Read each file
+        const content = fs.readFileSync(file, 'utf-8')
+
+        // Find all occurrences of @testRail(id)
+        const regex = /@testRail\((\d+)\)/g
+        let match
+
+        while((match = regex.exec(content)) !== null) {
+          //console.log(`@testRail(${ match[1] })`)
+          await rateLimitedUpdate(match[1])
+          count++
+        }
+      }
+    }
+
+    // If e2e
+    if(secondArg === '-e2e') {
+      // Find all .spec.js files in the specified directory
+      const files = glob.sync(`${ directoryPath }/**/*.feature`)
+
+      for(const file of files) {
+      // Read each file
+        const content = fs.readFileSync(file, 'utf-8')
+
+        // Find all occurrences of @testRail(id)
+        const regex = /@caseid-(\d+)/g
+        let match
+
+        while((match = regex.exec(content)) !== null) {
+          await rateLimitedUpdate(match[1])
+          count++
+        }
+      }
+    }
+
+    console.log(`Number of Tests found and updated: ${ count }`)
   }
   else {
     console.error('No command specified!')
